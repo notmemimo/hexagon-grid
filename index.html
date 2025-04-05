@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>شبكة الحروف السداسية</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: black;
+      background-position: center;
+      margin: 0;
+    }
+
+    .hex-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 90px);
+      justify-content: center;
+      gap: 0;
+      padding: 0;
+    }
+
+    .hex {
+      width: 90px;
+      height: 78px;
+      background: #fdf5c9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: black;
+      border: 2px solid #000;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      cursor: pointer;
+      transition: background 0.3s;
+      margin: -7px 0; /* يقلل الفراغ بين الصفوف */
+    }
+
+    .hex.clicked-green {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .hex.clicked-orange {
+      background: #FF9800;
+      color: white;
+    }
+
+    /* إزاحة الصفوف الفردية */
+    .hex:nth-child(10n + 6),
+    .hex:nth-child(10n + 7),
+    .hex:nth-child(10n + 8),
+    .hex:nth-child(10n + 9),
+    .hex:nth-child(10n + 10) {
+      transform: translateX(45px);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      color: black;
+      background: #e6b2e4;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ae69ab;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hex-grid" id="hexGrid"></div>
+
+  <button onclick="shuffleHex()">🔄 خلط الحروف</button>
+
+  <script>
+    let letters = ["أ", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن"];
+    const grid = document.getElementById("hexGrid");
+
+    function renderHexGrid() {
+      grid.innerHTML = "";
+      letters.forEach((letter, i) => {
+        const hex = document.createElement("div");
+        hex.classList.add("hex");
+        hex.textContent = letter;
+
+       hex.addEventListener("click", () => {
+  if (hex.classList.contains("clicked-green")) {
+    hex.classList.remove("clicked-green");
+    hex.classList.add("clicked-orange");
+  } else if (hex.classList.contains("clicked-orange")) {
+    hex.classList.remove("clicked-orange");
+    // ترجع للوضع الطبيعي
+    hex.style.background = "#fdf5c9";
+    hex.style.color = "black";
+  } else {
+    hex.classList.add("clicked-green");
+    hex.style.background = ""; // لو فيه تغيير سابق
+    hex.style.color = "";
+  }
+});
+
+        grid.appendChild(hex);
+      });
+    }
+
+    function shuffleHex() {
+      letters.sort(() => Math.random() - 0.5);
+      renderHexGrid();
+    }
+
+    renderHexGrid();
+  </script>
+
+</body>
+</html>
